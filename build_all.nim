@@ -9,7 +9,13 @@ proc build*(dir: string) =
 proc main* = 
   var num: int
   for k, p in walkDir(getCurrentDir()):
-    if "gen-bin" in p: continue
+    var skip = false
+    for forbid in ["gen-bin", ".git"]:
+      if forbid in p:
+        skip = true
+
+    if skip: continue
+
     if k == pcDir:
       inc num
       info "Building package: " & p
