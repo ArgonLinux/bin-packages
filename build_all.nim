@@ -1,6 +1,9 @@
 import std/[os, osproc, strutils], libarpm/io
 
 proc build*(dir: string) =
+  if fileExists(dir / ".git"):
+    removeFile(dir / ".git") # otherwise, shit hits the fan
+
   let res = execCmd("sh " & dir & "/build.sh")
 
   if res != 0:
