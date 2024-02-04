@@ -11,18 +11,27 @@ proc build*(dir: string) =
 
 proc main* = 
   var num: int
-  for k, p in walkDir(getCurrentDir()):
-    var skip = false
-    for forbid in ["gen-bin", ".git"]:
-      if forbid in p:
-        skip = true
+  if paramCount() < 1:
+    for k, p in walkDir(getCurrentDir()):
+      var skip = false
+      for forbid in ["gen-bin", ".git"]:
+        if forbid in p:
+          skip = true
 
-    if skip: continue
+      if skip: continue
 
-    if k == pcDir:
-      inc num
-      info "Building package: " & p
-      build p
+      if k == pcDir:
+        inc num
+        info "Building package: " & p
+        build p
+  else:
+    var i = 0
+
+    while i < paramCount():
+      inc i
+      build(paramStr(i))
+
+    num = i
 
   info "Successfully built #" & $num & " package(s)!"
 
